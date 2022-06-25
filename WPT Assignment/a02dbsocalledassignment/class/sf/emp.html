@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script>
+         $(()=>{
+           console.log("page loaded");
+
+           $('#empno').blur(()=>{
+            console.log("blur event");
+
+            let input={empno:$('#empno').val()};
+
+            let ajaxparameters={
+                data:input,
+                url:'http://localhost:90/getdetails',
+                type:'get',
+                datatypt:'json',
+                success: (datafromserver)=>{
+                    if(datafromserver.status===true){
+                        console.log("data fetched successfully");
+                        $('#empname').val(datafromserver.empdetails.empname);
+                        $('#mobile').val(datafromserver.empdetails.mobile);
+                        $('#msg').text("emp details found");
+                        $('#insert').prop("disabled",true);
+                    }
+                    else{
+                        $('#empname').val("");
+                        $('#mobile').val("");
+                        $('#msg').text("emp details not found");
+                        $('#insert').prop("disabled",false);
+                        
+                    }
+
+                    },
+                    error: (errorfromserver)=>{
+                        console.log("error occured"+ errorfromserver);
+                    }
+                }
+                $.ajax(ajaxparameters);
+
+            
+           });
+           $('#insert').click(()=>{
+            console.log("blur event");
+
+            let input={empno:$('#empno').val(),empname:$('#empname').val(),mobile:$("#mobile").val()};
+
+            let ajaxparameters={
+                data:input,
+                url:'http://localhost:90/insertdetails',
+                type:'get',
+                datatypt:'json',
+                success: (datafromserver)=>{
+                    if(datafromserver.status===true){
+                        console.log("insert successfull");
+                    
+                    }
+                    else{
+                       console.log("insert unsuccessfull")
+                        $('#msg').text("insert unsuccessfull");
+                       
+                        
+                    }
+
+                    },
+                    error: (errorfromserver)=>{
+                        console.log("error occured"+ errorfromserver);
+                    }
+                }
+                $.ajax(ajaxparameters);
+
+            
+           });
+           
+
+         });
+
+
+
+
+    </script>
+</head>
+<body>
+    <input type="text" id="empno" name="empno" placeholder="employee no">
+    <span id="msg">what happened</span>
+    <input type="text" id="empname" name="empname" placeholder="employee name">
+    <input type="text" id="mobile" name="mobile" placeholder="employee mobile no">
+    <button id="insert" value="insert" disabled>Insert</button>
+</body>
+</html>
