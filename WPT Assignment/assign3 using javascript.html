@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <script>
+        window.addEventListener('DOMContentLoaded',
+    ()=>{
+
+    
+    let items=[];
+    items.push({itemno:1,itemname:'pencil',itemprice:3});
+    items.push({itemno:2,itemname:'scale',itemprice:5});
+    items.push({itemno:3,itemname:'box',itemprice:50});
+
+   
+    function getItemOnItemno(itemno){
+
+     let output ={ itemnofoundstatus:false , itemdetails:{itemno:3,itemname:'box',itemprice:50} };
+     for(let i=0; i < items.length;i++)
+    	{
+    	if(items[i].itemno == itemno)
+    	{
+    		output.itemnofoundstatus=true;
+    		output.itemdetails=items[i];
+    		break;
+
+    	}
+
+    	}
+
+
+    return output;
+
+    }
+    function showcontents()
+    {
+        let contents=document.querySelector("#contents");
+        let itemscontents="";
+        for(let i=0;i<items.length;i++)
+        {
+            itemscontents+="</BR>" +items[i].itemno +"  "+items[i].itemname +" " +items[i].itemprice;
+        }
+        contents.innerHTML=itemscontents;
+    }
+    showcontents();
+
+    function additems(input)
+    {
+        let added=false;
+        items.push(input);
+        added=true;
+        return added;
+    }
+
+     function updateitems(updatedObjects)
+    {
+        let updated=false;
+        for(let i=0 ; i< items.length ;i++)
+        {
+            if(items[i].itemno==updatedObjects.itemno)
+            {
+               items[i].itemname=updatedObjects.itemname;
+               items[i].itemprice=updatedObjects.itemprice;
+               updated=true;
+               break;
+            }
+        }
+        return updated;
+    }
+
+
+
+
+
+
+
+
+    let itemno=document.querySelector("#itemno");
+    itemno.addEventListener('blur',()=>{
+
+   
+    let itemno=document.querySelector("#itemno").value;
+
+    document.querySelector("#itemno").disabled=true;
+
+    let output= getItemOnItemno(itemno);
+
+
+
+
+    
+    let message=document.querySelector("#message");
+
+    if(output.itemnofoundstatus)
+    {
+
+
+    message.innerText="item details found";
+    document.querySelector("#itemname").value=
+    output.itemdetails.itemname;
+    document.querySelector("#itemprice").value=
+    output.itemdetails.itemprice;
+
+
+
+
+
+
+
+    }
+    else
+    {
+    message.innerText="item details not found";
+    document.querySelector("#itemname").value=
+    "";
+    document.querySelector("#itemprice").value=
+    "";
+
+
+    }
+
+
+
+    });
+
+
+
+    let btn=document.querySelector("#add");
+    btn.addEventListener('click', ()=>{
+      let input={itemno:document.querySelector("#itemno").value, itemname:document.querySelector("#itemname").value, itemprice:document.querySelector("#itemprice").value};
+
+      let output= additems(input);
+      let message=document.querySelector("#message");
+
+      if(output)
+      {
+        message.innerText="item added";
+      }
+      else
+      {
+         message.innerText="item not added"
+      }
+      document.querySelector("#itemname").value="";
+      document.querySelector("#itemprice").value="";
+
+      showcontents();
+      document.querySelector("#itemno").disabled=false;
+
+    });
+
+
+
+      let update=document.querySelector("#update");
+    update.addEventListener('click', ()=>{
+      let updatedObjects={itemno:document.querySelector("#itemno").value, itemname:document.querySelector("#itemname").value, itemprice:document.querySelector("#itemprice").value};
+
+      let output= updateitems(updatedObjects);
+      let message=document.querySelector("#message");
+
+      if(output)
+      {
+        message.innerText="item updated";
+      }
+      else
+      {
+         message.innerText="item not updated";
+      }
+      document.querySelector("#itemname").value="";
+      document.querySelector("#itemprice").value="";
+
+      showcontents();
+      document.querySelector("#itemno").disabled=false;
+      document.querySelector("#itemno").focus();
+
+    });
+
+    });
+  </script>
+  <body>
+    <br />
+    <input type="text" id="itemno" placeholder="item number" />
+    <span id="message"> what happened</span>
+    <br />
+    <input type="text" id="itemname" placeholder="item name" />
+    <br />
+    <input type="text" id="itemprice" placeholder="item price" />
+    <br /><br /><button id="add">Add Item</button>
+    <button id="update">update Item</button>
+    <hr />
+    <p id="contents">all items show it here</p>
+  </body>
+</html>

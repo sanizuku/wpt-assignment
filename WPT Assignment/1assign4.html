@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+
+    class Employee{
+
+        constructor(empno,empname,email,deptno){
+            this.empno=empno;
+            this.empname=empname;
+            this.email=email;
+            this.deptno=deptno;
+
+        }
+
+        setEmployeeDetails(empno,empname,email,deptno){
+            this.empno=empno;
+            this.empname=empname;
+            this.email=email;
+            this.deptno=deptno;
+
+        }
+
+        getEmployeeDetails(){
+            return this.empno+"--"+this.empname+"--"+this.email+"--"+this.deptno;
+        }
+    }
+
+
+    class Logic{
+
+        constructor(){
+            this.employees=[
+                new Employee(1,"ravi","ravi@gmail.com",10),
+                new Employee(2,"ajay","ajay@gmail.com",20),
+                new Employee(3,"nipun","nipun@gmail.com",10),
+                new Employee(4,"harsh","harsh@gmail.com",30),
+            ];
+        }
+
+
+        employeeDetails(empno){
+            let output={result:false,empdetails:{}};
+            for(let i=0;i<this.employees.length;i++)
+                {
+                    if(this.employees[i].empno == empno)
+                    {
+                        output.result = true;
+                        output.empdetails =this.employees[i];
+                        break; 
+                    }
+                }
+                return output;
+
+        }
+
+        modify(updateemployee){
+            //console.log(modifyitem.itemno);
+             let output = false;
+            for(let i=0; i<this.employee.length;i++)
+            {
+            if(this.employees[i].empno == updateemployee.empno)
+                {
+                    this.employees.setEmployeeDetails(updateemployee.empno,updateemployee.empname,updateemployee.email,updateemployee.deptno);
+                    output = true;
+                    break;
+
+                }
+            }
+                console.log("inside update function" + output);
+                return output;
+        }
+
+
+        removeDetails(empno)
+            {
+                let output =false;
+            for(let i=0; i < this.employees.length; i++)
+            {
+            if(this.employees[i].empno == empno )
+            {	
+                this.employees.splice(i,1); // which position, how many elements to remove
+            output=true;
+            break;
+            }
+
+            }
+            console.log("inside remove" + output);
+            return output;
+            }
+
+        getAll(){
+            return this.employees;
+        }
+
+        ifExist(checkEmp){
+            console.log("ifWxist called");
+            let exists=false;
+            for (let i = 0; i < this.employees.length; i++) {
+
+                if(this.employees[i].empno==checkEmp.eno){
+                    exists=true;
+                    break;
+                }  
+            }
+            return exists;
+        }
+
+        viewOnDeptId(deptId)
+        {
+            console.log("viewOnDeptId called");
+            console.log(deptId);
+	        let msg="";
+	        for(let i=0; i < this.employees.length; i++){
+
+                if(this.employees[i].deptno==deptId){
+                    console.log(this.employees[i].deptid);
+                    
+                    msg+= "<Br/>" + this.employees[i].empno +  " --" + this.employees[i].empname +
+	        "--"+ this.employees[i].email +"--"+ this.employees[i].deptno ;
+                }
+                
+            }
+            console.log(msg);
+            document.querySelector("#msg2").innerHTML=msg;
+        }
+    }
+
+    
+    window.addEventListener('DOMContentLoaded',()=>{
+           
+        let logic = new Logic();
+
+
+
+        
+
+
+        function showAll()
+        {
+            console.log("show all details");
+            let output = logic.getAll();
+	        let msg="";
+	        for(let i=0; i < output.length; i++)
+	        msg+= "<Br/>" + output[i].empno +  " --" + output[i].empname +
+	        "--"+ output[i].email +"--"+ output[i].deptid ;
+	  
+	    document.querySelector("#msg2").innerHTML=msg;
+
+
+        }
+
+
+            const empno = document.querySelector("#empno");
+            empno.addEventListener('blur',()=>{
+                console.log("blur event ");
+                let name=document.querySelector("#empname").value;
+                console.log(name);
+               
+               let empno = document.querySelector("#empno").value;
+                console.log("input is" +empno);
+                let output = logic.employeeDetails(empno);
+                
+
+            if(output.result)
+            {
+                document.querySelector("#empname").value = output.empdetails.empname;
+                document.querySelector("#email").value = output.empdetails.email;
+                document.querySelector("#deptid").value = output.empdetails.deptid;
+                document.querySelector("#msg1").innerText = "emp details found";
+                
+                document.querySelector("#modifybtn").disabled= false;
+                document.querySelector("#removebtn").disabled = false;
+                document.querySelector("#addbtn").disabled = true;
+                document.querySelector("#viewallbtn").disabled = true;
+                document.querySelector("#viewondeptbtn").disabled = true;
+               
+            }
+            else{
+                console.log("no emp details found");
+                document.querySelector("#msg1").innerText = "emp details not found"
+                document.querySelector("#addbtn").disabled = false;
+                document.querySelector("#modifybtn").disabled = true;
+                document.querySelector("#removebtn").disabled= true;
+                document.querySelector("#viewallbtn").disabled = true;
+                document.querySelector("#viewondeptbtn").disabled = true;
+                document.querySelector("#empname").value = " ";
+                document.querySelector("#email").value = " ";
+                document.querySelector("#deptid").value = " ";
+                
+            }
+
+
+            });
+
+            const addbtn = document.querySelector("#addbtn");
+            addbtn.addEventListener('click',()=>{
+                console.log("add button clicked");
+
+                let empl = {empno:document.querySelector("#empno").value,
+                                empname:document.querySelector("#empname").value,
+                                email:document.querySelector("#email").value,
+                                deptid:document.querySelector("#deptid").value};
+
+                console.log(empl);
+                let output = logic.ifExist(empl);
+                console.log(output);
+
+                if(!output){
+                    logic.employees.push(empl);
+                                        
+                    document.querySelector("#msg1").innerText="employee Added Successfully";
+                    document.querySelector("#viewondeptbtn").disabled=false;
+                    document.querySelector("#viewallbtn").disabled=false;
+                }
+                else{
+                    document.querySelector("#msg1").innerText="employee Already Exist";
+                    
+                }
+
+            });
+
+
+
+            const modifybtn = document.querySelector("#modifybtn");
+            modifybtn.addEventListener('click',()=>{
+                console.log("modifybutton clicked");
+                let input= {empno:document.querySelector("#empno").value,
+                 empname:document.querySelector("#empname").value,
+                email:document.querySelector("#email").value,
+                deptid:document.querySelector("#deptid").value };
+
+                let output=logic.modify(input);
+
+                if(output)
+                {
+                    document.querySelector("#msg1").innerText="update suceeded";
+                    document.querySelector("#viewallbtn").disabled=false;
+                    console.log('viewall enamble');
+	                document.querySelector("#viewondeptbtn").disabled=false;
+	                
+	
+                    }
+            else
+            {
+                 document.querySelector("#msg1").innerText="update failed";
+
+               /* document.querySelector("#update").disabled=true;
+	             document.querySelector("#delete").disabled=true;
+	            document.querySelector("#clear").disabled=true;*/
+
+            }
+
+            showAll();              
+           
+            });
+            
+
+            const viewallbtn = document.querySelector("#viewallbtn");
+            viewallbtn.addEventListener('click',()=>{
+                console.log("viewall button clicked");
+                showAll();
+                
+
+            });
+            const viewondeptbtn = document.querySelector("#viewondeptbtn");
+            viewondeptbtn.addEventListener('click',()=>{
+                console.log("view on deptid button clicked");
+                let empID =document.querySelector("#deptid").value;
+                console.log(empID);
+                logic.viewOnDeptId(empID);
+                
+
+            });
+
+            const removebtn = document.querySelector("#removebtn");
+            removebtn.addEventListener('click',()=>{
+                console.log("remove button clicked");
+                let input = document.querySelector("#empno").value;
+
+                let output = logic.removeDetails(input);
+                if(output)
+            {
+            document.querySelector("#msg1").innerText="delete suceeded";
+            document.querySelector("#addbtn").disabled=false;
+	        document.querySelector("#viewallbtn").disabled=true;
+	        document.querySelector("#viewondeptbtn").disabled=true;
+	        document.querySelector("#empno").value="";
+	
+	        document.querySelector("#empname").value="";
+	        document.querySelector("#email").value="";
+
+            document.querySelector("#deptid").value="";
+
+            }
+            else
+            {
+            document.querySelector("#msg1").innerText="delete failed";
+
+            document.querySelector("#modify").disabled=true;
+	        /*document.querySelector("#delete").disabled=true;
+	        document.querySelector("#clear").disabled=true;*/
+
+            }
+            showAll();
+
+            });
+            
+
+
+
+        });
+
+    </script>
+</head>
+<body>
+    <input type="text" id="empno" placeholder="employee number"/>
+    <span id="msg1">message on x axis</span>
+    <br/>
+    <br/><input type="text" id="empname" placeholder="employee name"/>
+    <br/>
+    <br/><input type="email" id="email" placeholder="employee mail"/>
+    <br/>
+    <br/><input type="text" id="deptid" placeholder="dept id"/>
+    <br/>
+    <br/><button id="addbtn"> add</button>
+    <button id="modifybtn"> modify </button>
+    <button id="removebtn"> remove </button>
+    <button id="viewallbtn"> view all </button>
+    <button id="viewondeptbtn"> view on deptid</button>
+    
+    
+    <br/>
+    <br/>
+    <hr/>
+    <span id="msg2"> message on y axis </span>
+</body>
+</html>
