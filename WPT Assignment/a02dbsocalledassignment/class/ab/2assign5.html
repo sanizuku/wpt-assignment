@@ -1,0 +1,51 @@
+<html>
+    <head>
+        <script
+        src="https://code.jquery.com/jquery-3.6.0.js"
+        ></script>
+        <script>
+            $(()=>{
+                // console.log("started");
+
+                $('#acc').blur(
+                    ()=>{
+                        console.log("blur event");
+                        ip={accno:$("#acc").val()};
+                        let parameters={
+                            data:ip,
+                            url:"http://localhost:789/getbalance",
+                            type:'get',
+                            dataType:'json',
+                            success:(datafromserver)=>{
+                                console.log("data from server :"+datafromserver.status);
+
+                                if(datafromserver.status==true){
+                                    $("#bal").val(datafromserver.details.balance);
+                                }else{
+                                    $("#bal").val("not found");
+                                }
+                            },
+
+                            error:(error)=>{
+                                console.log(error);
+                            }
+                           
+                        }
+                        $.ajax(parameters);
+                    }
+                );
+
+
+                
+            })
+        </script>
+    </head>
+    <body>
+        <!-- <form action="getpincode" method="get"> -->
+            <input type="text" name="account" id="acc" placeholder="Enter Account No"/><br>
+            <input type="text" name="balance" id="bal" placeholder="Bank Balance"/>
+            <span id="span1">Ckeck Balance </span>
+            <!-- <button id="upd">update</button> -->
+        <!-- </form> -->
+    </body>
+</html>
